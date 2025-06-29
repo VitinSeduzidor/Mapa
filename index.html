@@ -4,105 +4,145 @@
   <meta charset="UTF-8">
   <title>Mapa Interativo</title>
   <style>
-    /* Container do mapa com posição relativa para posicionar os pontos */
+    /* Container do mapa */
     #mapa {
       position: relative;
-      width: 800px; /* ajuste conforme necessário */
+      width: 800px;
       margin: 0 auto;
+      padding: 10px;
+      background: #fff;
     }
-
-    /* A imagem do mapa ocupará 100% da largura do container */
-    #mapa img {
+    #mapa > img {
       width: 100%;
       display: block;
     }
-    
-    /* Container de cada ponto (usado para posicionamento e lógica do popup) */
+
+    /* Pontos */
     .ponto {
       position: absolute;
-      z-index: 1; /* valor base para todos os pontos */
+      z-index: 1;
     }
-    
-    /* Círculo interativo (dot) que será dimensionado ao hover */
     .dot {
       width: 10px;
       height: 10px;
-      border-radius: 50%; /* torna o elemento circular */
+      border-radius: 50%;
+      outline: 1px solid #000;
       cursor: pointer;
-      transition: transform 0.3s;
-      outline: 1px solid black;
-      /* A cor será definida via style inline ou via classe específica */
+      transition: transform .3s;
     }
-    
-    /* Aplica o efeito de scale somente ao círculo (dot) */
     .ponto:hover .dot {
       transform: scale(1.3);
     }
-    
-    /* Popup com a foto, inicialmente escondido */
+
+    /* Popup base (fechado) */
     .popup {
       display: none;
       position: absolute;
-      top: -110px; /* ajuste conforme necessário */
-      left: -90px;
-      width: 200px;
-      background-color: #fff;
-      padding: 5px;
-      border: 1px solid #ccc;
+      bottom: calc(100% + 5px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      width: 250px;              /* largura */
+      height: 320px;             /* altura */
+
+      background: #fff;
+      border: 1px solid #000;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      z-index: 10;
+
+      box-sizing: border-box;
+      padding: 8px;              /* pixels da borda das imagens */
+      overflow: hidden;
     }
-    
-    /* Regra para limitar a altura e a largura das imagens a 300px */
-    .popup img {
-      max-width: 300px;
-      max-height: 300px;
-      width: auto;
-      height: auto;
-      display: block;
-    }
-    
-    /* Exibe o popup quando a classe "active" é adicionada */
     .ponto.active .popup {
       display: block;
-    }
-    
-    /* Eleva o índice do ponto ativo para mantê-lo à frente */
-    .ponto.active {
       z-index: 1000;
+    }
+
+    /* Imagem ocupa todo o interior (menos o padding) */
+    .popup img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Faixa branca contendo os textos */
+    .popup .caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      background: #fff;
+      padding: 8px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .caption h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+      color: #000;
+    }
+    .caption p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      line-height: 1.2;
+      color: #333;
+      max-height: 3.4em;
+      overflow: visible;
+      word-wrap: break-word;
     }
   </style>
 </head>
 <body>
   <div id="mapa">
-    <!-- Imagem do mapa -->
     <img src="mapa.png" alt="Mapa">
 
-    <!-- Ponto interativo 1 -->
-    <div class="ponto" style="top: 676px; left: 517px;" onclick="togglePopup(this)">
-      <!-- Círculo (dot) com a cor definida diretamente -->
+    <!-- Ponto 1 -->
+    <div class="ponto" style="top: 686px; left: 526px;" onclick="togglePopup(this)">
       <div class="dot" style="background-color: #164c77;"></div>
-      <!-- Popup com a imagem -->
       <div class="popup">
-        <img src="daep.jpg" alt="daep">
+        <img src="daep.jpg" alt="Foto DAEP">
+        <div class="caption">
+          <h3>DAEP</h3>
+          <p>Localizado entre os blocos PE e PF, no andar térreo aos lado das escadas em frente aos gabinetes dos professores</p>
+        </div>
       </div>
     </div>
 
-    <!-- Ponto interativo 2 -->
-    <div class="ponto" style="top: 763px; left: 507px;" onclick="togglePopup(this)">
-      <!-- Círculo (dot) com a cor definida diretamente -->
-      <div class="dot" style="background-color: #2080cf;"></div>
-      <!-- Popup com a imagem -->
+    <!-- Ponto 2 -->
+    <div class="ponto" style="top: 755px; left: 425px;" onclick="togglePopup(this)">
+      <div class="dot" style="background-color: #ffbe00;"></div>
       <div class="popup">
-        <img src="alcance.jpeg" alt="alcance">
+        <img src="cesec.jpeg" alt="Foto CESEC">
+        <div class="caption">
+          <h3>CESEC</h3>
+          <p>Localizado próximo aos blocos PH e PI, em frente a uma rua sem saída</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+      <!-- Ponto 3 -->
+    <div class="ponto" style="top: 770px; left: 468px;" onclick="togglePopup(this)">
+      <div class="dot" style="background-color: #ff4c00;"></div>
+      <div class="popup">
+        <img src="auditorio cesec.jpeg" alt="Foto Auditorio CESEC">
+        <div class="caption">
+          <h3>Auditório do CESEC</h3>
+          <p>No segundo andar do prédio do CESEC, de frente para as escadas</p>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Função que alterna a exibição do popup ao clicar
-    function togglePopup(element) {
-      element.classList.toggle('active');
+    function togglePopup(el) {
+      document.querySelectorAll('.ponto.active').forEach(p => {
+        if (p !== el) p.classList.remove('active');
+      });
+      el.classList.toggle('active');
     }
   </script>
 </body>
